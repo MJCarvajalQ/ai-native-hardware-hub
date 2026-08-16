@@ -36,6 +36,6 @@ public class AuthController {
             throw new InvalidCredentialsException();
         }
 
-        return new LoginResponse(tokenStore.issueToken(user.getId()));
+        return new LoginResponse(tokenStore.issueToken(user.getId()), user.getEmail(), user.getRole());
     }
 }

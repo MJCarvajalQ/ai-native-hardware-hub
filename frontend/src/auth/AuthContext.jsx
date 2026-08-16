@@ -1,25 +1,30 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 import { api } from '../api/client'
-import { getToken, setToken, clearToken } from './token'
+import { getToken, setToken, clearToken, getUser, setUser, clearUser } from './token'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!getToken())
+  const [user, setUserState] = useState(() => getUser())
 
   const login = useCallback(async (email, password) => {
     const data = await api.post('/auth/login', { email, password }, { auth: false })
     setToken(data.token)
+    setUser({ email: data.email, role: data.role })
+    setUserState({ email: data.email, role: data.role })
     setIsAuthenticated(true)
   }, [])
 
   const logout = useCallback(() => {
     clearToken()
+    clearUser()
+    setUserState(null)
     setIsAuthenticated(false)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
