@@ -2,12 +2,13 @@ package com.hardwarehub.controller;
 
 import com.hardwarehub.dto.CreateHardwareRequest;
 import com.hardwarehub.dto.HardwareDTO;
-import com.hardwarehub.dto.RentRequest;
 import com.hardwarehub.model.HardwareStatus;
+import com.hardwarehub.model.User;
 import com.hardwarehub.service.HardwareService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -57,13 +58,13 @@ public class HardwareController {
     }
 
     @PostMapping("/{id}/rent")
-    public HardwareDTO rent(@PathVariable Long id, @Valid @RequestBody RentRequest request) {
-        return HardwareDTO.from(hardwareService.rent(id, request.userEmail()));
+    public HardwareDTO rent(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+        return HardwareDTO.from(hardwareService.rent(id, currentUser.getEmail()));
     }
 
     @PostMapping("/{id}/return")
-    public HardwareDTO returnItem(@PathVariable Long id, @Valid @RequestBody RentRequest request) {
-        return HardwareDTO.from(hardwareService.returnItem(id, request.userEmail()));
+    public HardwareDTO returnItem(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+        return HardwareDTO.from(hardwareService.returnItem(id, currentUser.getEmail()));
     }
 
     @PatchMapping("/{id}/repair")

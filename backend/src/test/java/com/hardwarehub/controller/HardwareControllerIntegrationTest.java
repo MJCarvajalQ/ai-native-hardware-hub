@@ -60,10 +60,10 @@ class HardwareControllerIntegrationTest {
     @Test
     void rentingAnUnavailableDeviceReturns409WithTheExpectedErrorBody() throws Exception {
         // seed id 2 (Apple MacBook Pro 13) is loaded as IN_USE
+        // no request body: the acting user comes from the authenticated
+        // principal (the token), not a client-supplied field
         mockMvc.perform(post("/api/hardware/2/rent")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"userEmail\":\"test@example.com\"}"))
+                        .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.error").value("Conflict"));
