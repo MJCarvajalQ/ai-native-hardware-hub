@@ -17,6 +17,14 @@ public class Hardware {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The id field from the original seed JSON, kept purely for traceability.
+     * Nothing else reads this — it exists so the duplicate id in the seed data
+     * (two rows both marked id 4) can be traced back to their source row even
+     * though this app never uses seed-provided ids as its own primary keys.
+     */
+    private Long seedId;
+
     @Column(nullable = false)
     private String name;
 
@@ -44,6 +52,14 @@ public class Hardware {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getSeedId() {
+        return seedId;
+    }
+
+    public void setSeedId(Long seedId) {
+        this.seedId = seedId;
     }
 
     public String getName() {
