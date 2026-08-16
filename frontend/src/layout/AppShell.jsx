@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 export function AppShell() {
-  const { logout } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
   function handleLogout() {
@@ -17,7 +17,7 @@ export function AppShell() {
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <NavLink to="/">Hardware List</NavLink>
           <NavLink to="/my-rentals">My Rentals</NavLink>
-          <NavLink to="/admin">Admin Panel</NavLink>
+          {user?.role === 'ADMIN' && <NavLink to="/admin">Admin Panel</NavLink>}
         </nav>
         <button type="button" onClick={handleLogout} style={{ marginTop: '2rem' }}>
           Log out
