@@ -26,6 +26,9 @@ dist/
 # OS
 .DS_Store
 
+# Claude Code local tooling config — not project content
+.claude/
+
 # Prompt trail — drafted throughout the build, held for review before commit.
 # Force-add deliberately at Block L2 once reviewed: git add -f PROMPTS.md
 PROMPTS.md
