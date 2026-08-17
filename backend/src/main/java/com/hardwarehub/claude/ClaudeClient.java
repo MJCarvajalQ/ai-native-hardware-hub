@@ -63,8 +63,17 @@ public class ClaudeClient {
 
         JsonNode root = objectMapper.readTree(response.body());
         JsonNode content = root.path("content");
-        if (content.isArray() && content.size() > 0) {
-            return content.get(0).path("text").asText();
+        // Claude Opus 5 thinks by default, so content[0] is often a "thinking"
+        // block (empty text, since we don't ask for a summary) rather than the
+        // actual answer — scan for the first "text" block instead of assuming
+        // it's at index 0. Found live: the naive content[0] read silently
+        // returned "" and broke the search parser downstream.
+        if (content.isArray()) {
+            for (JsonNode block : content) {
+                if ("text".equals(block.path("type").asText())) {
+                    return block.path("text").asText();
+                }
+            }
         }
         throw new IOException("Unexpected Claude API response shape: " + response.body());
     }
