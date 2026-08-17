@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { listHardware, createHardware, deleteHardware, toggleRepair } from '../api/hardware'
 import { createUser } from '../api/users'
+import { StatusPill } from '../components/StatusPill'
 
 export function AdminPage() {
   const [items, setItems] = useState([])
@@ -167,6 +168,7 @@ export function AdminPage() {
                 <th>Purchase Date</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -175,8 +177,8 @@ export function AdminPage() {
                   <td>{item.name}</td>
                   <td>{item.brand}</td>
                   <td>{item.purchaseDate ?? '—'}</td>
-                  <td>{item.status}</td>
-                  <td>
+                  <td className="status-cell"><StatusPill status={item.status} /></td>
+                  <td className="action-cell">
                     <button
                       type="button"
                       onClick={() => handleToggleRepair(item.id)}
@@ -184,8 +186,10 @@ export function AdminPage() {
                       title={item.status === 'IN_USE' ? 'Return it first' : undefined}
                     >
                       {item.status === 'REPAIR' ? 'Mark Available' : 'Send to Repair'}
-                    </button>{' '}
-                    <button type="button" onClick={() => handleDelete(item.id)}>
+                    </button>
+                  </td>
+                  <td className="action-cell">
+                    <button type="button" className="button-danger" onClick={() => handleDelete(item.id)}>
                       Delete
                     </button>
                   </td>

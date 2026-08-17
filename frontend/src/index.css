@@ -1,53 +1,23 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --text: #2b2b33;
+  --text-muted: #6b6375;
+  --bg: #fafafa;
+  --surface: #fff;
+  --border: #dfdde3;
+  --accent: #202020;
+  --accent-text: #fff;
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  font: 15px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -55,57 +25,212 @@ body {
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
   font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-weight: 600;
+  margin: 0 0 20px;
 }
+
+h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
 p {
-  margin: 0;
+  margin: 0 0 8px;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+a {
+  color: inherit;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Forms */
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+label {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Every pill-shaped control — buttons and status badges alike — shares this
+   one size, so "Ask AI", "Available", "Rent", etc. all look like the same
+   kind of thing instead of each hugging its own text width. */
+button,
+.status-pill {
+  font: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  min-width: 80px;
+  padding: 5px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.button-danger {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.status-pill {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Sort buttons in table headers are text, not pills — reset back to plain */
+th button {
+  min-width: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Secondary-looking buttons: any button inside a <td> that's disabled acts
+   as a status pill rather than an action, handled below */
+td button:disabled {
+  background: var(--border);
+  border-color: var(--border);
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* Tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Name is the only column that should stretch to absorb leftover space;
+   every other column sizes to its own content, like a normal table. */
+th:first-child,
+td:first-child {
+  width: 100%;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  overflow-wrap: break-word;
+}
+
+/* Status/action/delete columns hold a single short pill or button — never
+   wrap those, so the column shrinks tightly around them */
+.status-cell,
+.action-cell {
+  white-space: nowrap;
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.status-pill--available {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.status-pill--in_use {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.status-pill--repair {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* Alerts */
+
+[role='alert'] {
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* App shell (sidebar layout from AppShell.jsx) */
+
+aside {
+  background: var(--surface);
+}
+
+aside nav a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-muted);
+}
+
+aside nav a.active {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+main {
+  max-width: 1000px;
 }

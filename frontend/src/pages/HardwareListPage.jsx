@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { listHardware, rentHardware, returnHardware } from '../api/hardware'
 import { searchHardware } from '../api/search'
 import { useAuth } from '../auth/AuthContext'
+import { StatusPill } from '../components/StatusPill'
 
 function formatDate(isoDate) {
   return isoDate ?? '—'
@@ -243,9 +244,9 @@ export function HardwareListPage() {
                     <td>{hardware.name}</td>
                     <td>{hardware.brand}</td>
                     <td>{formatDate(hardware.purchaseDate)}</td>
-                    <td>{hardware.status}</td>
+                    <td className="status-cell"><StatusPill status={hardware.status} /></td>
                     <td>{reason}</td>
-                    <td>{renderAction(hardware)}</td>
+                    <td className="action-cell">{renderAction(hardware)}</td>
                   </tr>
                 ))
               : items.map((item) => (
@@ -253,8 +254,8 @@ export function HardwareListPage() {
                     <td>{item.name}</td>
                     <td>{item.brand}</td>
                     <td>{formatDate(item.purchaseDate)}</td>
-                    <td>{item.status}</td>
-                    <td>{renderAction(item)}</td>
+                    <td className="status-cell"><StatusPill status={item.status} /></td>
+                    <td className="action-cell">{renderAction(item)}</td>
                   </tr>
                 ))}
           </tbody>
