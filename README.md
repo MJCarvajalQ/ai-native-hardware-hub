@@ -234,11 +234,3 @@ new hire; reading the note stopped it.
 Full diagnostic trail — including an earlier, equally real 401-vs-403 bug in the
 auth layer, caught via the same discipline of reproducing with `curl` and
 reasoning from evidence rather than guessing — is in `PROMPTS.md`.
-
----
-
-**Time spent:** approximately 10 hours of active work across two sessions
-(Saturday afternoon/evening, Sunday morning), against the brief's 4–5 hour
-estimate. The gap is almost entirely the MVP-first restructuring documented in
-`PROMPTS.md` — building every stated requirement properly, with tests and CI,
-rather than a faster but thinner pass.
