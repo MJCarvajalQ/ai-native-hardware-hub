@@ -148,8 +148,11 @@ changed and why:
 ### Tooling
 
 Built entirely with **Claude Code** (Sonnet 5 for routine implementation, Opus 5
-for planning, architecture decisions, and the trickier debugging sessions). No
-MCP servers were used in the build itself.
+for planning, architecture decisions, and the trickier debugging sessions). Also
+tried **Claude Fable 5** briefly during early planning to compare it against
+Opus 5 for this kind of architecture/scoping work; Opus 5 was more than
+sufficient, so the rest of the build stayed on Sonnet 5/Opus 5. No MCP servers
+were used in the build itself.
 
 ### Data Strategy
 
