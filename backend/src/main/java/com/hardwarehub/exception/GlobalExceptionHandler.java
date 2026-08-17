@@ -44,6 +44,13 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(409, "Conflict", e.getMessage()));
     }
 
+    @ExceptionHandler(SearchUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleSearchUnavailable(SearchUnavailableException e) {
+        log.error("semantic search unavailable", e);
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                .body(new ErrorResponse(502, "Bad Gateway", "search is temporarily unavailable, try again later"));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
