@@ -30,5 +30,5 @@ dist/
 .claude/
 
 # Prompt trail — drafted throughout the build, held for review before commit.
-# Force-add deliberately at Block L2 once reviewed: git add -f PROMPTS.md
+# Force-add deliberately at the end, once fully reviewed: git add -f PROMPTS.md
 PROMPTS.md
