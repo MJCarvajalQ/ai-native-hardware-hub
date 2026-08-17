@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { listHardware, rentHardware, returnHardware } from '../api/hardware'
+import { searchHardware } from '../api/search'
 import { useAuth } from '../auth/AuthContext'
 
 function formatDate(isoDate) {
@@ -27,6 +28,14 @@ export function HardwareListPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [brandFilter, setBrandFilter] = useState('')
   const [availableBrands, setAvailableBrands] = useState([])
+
+  // AI search state. searchResults is null when no AI search is active (the
+  // normal sorted/filtered table renders instead); an array — possibly
+  // empty — once a search has run. Each entry is {hardware, reason}.
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState(null)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [searchError, setSearchError] = useState(null)
 
   // fetched once, unfiltered, purely to populate the brand dropdown options
   useEffect(() => {
@@ -57,6 +66,36 @@ export function HardwareListPage() {
   useEffect(() => {
     refresh()
   }, [refresh])
+
+  async function handleSearchSubmit(event) {
+    event.preventDefault()
+    const trimmed = searchQuery.trim()
+    if (!trimmed) {
+      setSearchResults(null)
+      setSearchError(null)
+      return
+    }
+    setSearchLoading(true)
+    setSearchError(null)
+    try {
+      const results = await searchHardware(trimmed)
+      setSearchResults(results)
+    } catch (err) {
+      setSearchError(err.message)
+      setSearchResults(null)
+    } finally {
+      setSearchLoading(false)
+    }
+  }
+
+  function handleSearchQueryChange(value) {
+    setSearchQuery(value)
+    if (!value.trim()) {
+      // empty query restores the full list immediately, no need to submit
+      setSearchResults(null)
+      setSearchError(null)
+    }
+  }
 
   function handleSort(columnKey) {
     if (columnKey === sortBy) {
@@ -93,7 +132,8 @@ export function HardwareListPage() {
     }
   }
 
-  function renderAction(item) {
+  function renderAction(hardware) {
+    const item = hardware
     const busy = pendingId === item.id
     if (item.status === 'AVAILABLE') {
       return (
@@ -123,9 +163,25 @@ export function HardwareListPage() {
     )
   }
 
+  const showingSearchResults = searchResults !== null
+
   return (
     <div>
       <h1>Hardware List</h1>
+
+      <form onSubmit={handleSearchSubmit}>
+        <input
+          placeholder="Ask AI…"
+          value={searchQuery}
+          onChange={(e) => handleSearchQueryChange(e.target.value)}
+        />
+        <button type="submit" disabled={searchLoading}>
+          {searchLoading ? 'Asking…' : 'Ask AI'}
+        </button>
+      </form>
+      {searchError && (
+        <p role="alert">Search is unavailable right now — try again, or use the filters below.</p>
+      )}
 
       <div>
         <label>
@@ -156,31 +212,51 @@ export function HardwareListPage() {
       {loading && <p>Loading…</p>}
       {error && <p role="alert">Failed to load hardware: {error}</p>}
 
-      {!loading && !error && (
+      {showingSearchResults && searchResults.length === 0 && (
+        <p>No matches for "{searchQuery.trim()}".</p>
+      )}
+
+      {!loading && !error && (showingSearchResults ? searchResults.length > 0 : true) && (
         <table>
           <thead>
             <tr>
               {COLUMNS.map((column) => (
                 <th key={column.key}>
-                  <button type="button" onClick={() => handleSort(column.key)}>
-                    {column.label}
-                    {sortBy === column.key ? (direction === 'asc' ? ' ▲' : ' ▼') : ''}
-                  </button>
+                  {showingSearchResults ? (
+                    column.label
+                  ) : (
+                    <button type="button" onClick={() => handleSort(column.key)}>
+                      {column.label}
+                      {sortBy === column.key ? (direction === 'asc' ? ' ▲' : ' ▼') : ''}
+                    </button>
+                  )}
                 </th>
               ))}
+              {showingSearchResults && <th>Why</th>}
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.brand}</td>
-                <td>{formatDate(item.purchaseDate)}</td>
-                <td>{item.status}</td>
-                <td>{renderAction(item)}</td>
-              </tr>
-            ))}
+            {showingSearchResults
+              ? searchResults.map(({ hardware, reason }) => (
+                  <tr key={hardware.id}>
+                    <td>{hardware.name}</td>
+                    <td>{hardware.brand}</td>
+                    <td>{formatDate(hardware.purchaseDate)}</td>
+                    <td>{hardware.status}</td>
+                    <td>{reason}</td>
+                    <td>{renderAction(hardware)}</td>
+                  </tr>
+                ))
+              : items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.brand}</td>
+                    <td>{formatDate(item.purchaseDate)}</td>
+                    <td>{item.status}</td>
+                    <td>{renderAction(item)}</td>
+                  </tr>
+                ))}
           </tbody>
         </table>
       )}
