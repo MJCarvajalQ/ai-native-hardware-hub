@@ -147,12 +147,13 @@ changed and why:
 
 ### Tooling
 
-Built entirely with **Claude Code** (Sonnet 5 for routine implementation, Opus 5
-for planning, architecture decisions, and the trickier debugging sessions). Also
-tried **Claude Fable 5** briefly during early planning to compare it against
-Opus 5 for this kind of architecture/scoping work; Opus 5 was more than
-sufficient, so the rest of the build stayed on Sonnet 5/Opus 5. No MCP servers
-were used in the build itself.
+Built entirely with **Claude Code** — mainly via its **VS Code extension**
+(Sonnet 5 for routine implementation, Opus 5 for planning, architecture
+decisions, and the trickier debugging sessions). Also tried **Claude Fable 5**
+briefly during early planning to compare it against Opus 5 for this kind of
+architecture/scoping work; Opus 5 was more than sufficient, so the rest of the
+build stayed on Sonnet 5/Opus 5. Git operations (branching, committing, pushing)
+were run from **IntelliJ IDEA**. No MCP servers were used in the build itself.
 
 ### Data Strategy
 
@@ -203,7 +204,11 @@ that a plain `LIKE`/keyword filter structurally cannot.
 
 See [`PROMPTS.md`](./PROMPTS.md) — every prompt that shaped the architecture,
 data model, state machine, or AI design, in order, including the reversals (the
-AI-feature choice changed twice before landing on semantic search).
+AI-feature choice changed twice before landing on semantic search). Those
+prompts produced a full build plan before any code existed; see
+[`PLAN.md`](./PLAN.md) for a summary of it — stack, data model, state machine,
+AI design, seed-audit strategy, block-by-block steps, and the requirements
+checklist used to hold the build accountable to the brief.
 
 ### The Correction
 

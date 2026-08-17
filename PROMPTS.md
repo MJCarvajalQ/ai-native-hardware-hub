@@ -9,6 +9,11 @@ Not every prompt sent during the build appears here — only the ones that chang
 architecture, data model, state machine, AI design, or toolchain. Routine
 implementation prompts are omitted; see "Which prompts earn an entry" for the rule.
 
+**The plan:** the prompts below produced a full build plan — stack, data model,
+state machine, AI design, seed-audit strategy, block-by-block steps, and a
+requirements checklist. That plan is the actual skeleton the rest of this repo
+was built against; see [`PLAN.md`](./PLAN.md) for a summary of it.
+
 **Planning window:** the entries below dated 2026-08-15 come from one continuous
 planning session, 10:49–15:05 UTC — about 4 hours, before a single line of code
 existed. The first actual build commit didn't land until the next day. That
