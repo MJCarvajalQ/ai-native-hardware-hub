@@ -76,7 +76,11 @@ public class HardwareService {
     }
 
     public void delete(Long hardwareId) {
-        getOrThrow(hardwareId);
+        Hardware hardware = getOrThrow(hardwareId);
+        if (hardware.getStatus() == HardwareStatus.IN_USE) {
+            throw new IllegalHardwareStateException(
+                    "cannot delete hardware " + hardwareId + ": it is currently in use, return it first");
+        }
         hardwareRepository.deleteById(hardwareId);
     }
 

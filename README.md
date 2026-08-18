@@ -38,6 +38,16 @@ into the process; without it the app still boots (nothing hardcodes a default
 admin password, on purpose — see ⚡ below) but the AI search returns a friendly
 502 instead of running.
 
+The `cp .env.example .env` step is only needed once, right after cloning —
+running it again later overwrites your real `.env` (and the key inside it) with
+the empty template. On every subsequent run, just `source .env` and start the
+backend.
+
+If the local database gets messy from testing (deleted items, rented items,
+etc.) and you want the original 11-item inventory back, run
+`backend/reset-demo-data.sh` (stops the backend, deletes the local `.db` file)
+and start the backend again.
+
 **2. Frontend**
 
 ```

@@ -189,7 +189,13 @@ export function AdminPage() {
                     </button>
                   </td>
                   <td className="action-cell">
-                    <button type="button" className="button-danger" onClick={() => handleDelete(item.id)}>
+                    <button
+                      type="button"
+                      className="button-danger"
+                      onClick={() => handleDelete(item.id)}
+                      disabled={item.status === 'IN_USE'}
+                      title={item.status === 'IN_USE' ? 'Return it first' : undefined}
+                    >
                       Delete
                     </button>
                   </td>

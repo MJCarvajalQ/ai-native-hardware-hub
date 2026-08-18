@@ -58,6 +58,16 @@ class HardwareServiceTest {
     }
 
     @Test
+    void cannotDeleteHardwareCurrentlyInUse() {
+        hardwareService = new HardwareService(hardwareRepository);
+        Hardware hardware = hardwareWithStatus(HardwareStatus.IN_USE);
+        when(hardwareRepository.findById(1L)).thenReturn(Optional.of(hardware));
+
+        assertThatThrownBy(() -> hardwareService.delete(1L))
+                .isInstanceOf(IllegalHardwareStateException.class);
+    }
+
+    @Test
     void rentThenReturnRestoresAvailableAndClearsAssignedTo() {
         hardwareService = new HardwareService(hardwareRepository);
         Hardware hardware = hardwareWithStatus(HardwareStatus.AVAILABLE);
